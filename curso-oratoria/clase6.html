@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apolo Creativo · Clase 6</title>
+
+<style>
+:root{
+  --bg:#07070a;
+  --surface:rgba(20,20,27,.78);
+  --surface2:#20202a;
+  --text:#f7f7fb;
+  --muted:#a8a8b4;
+  --line:rgba(255,255,255,.10);
+  --accent:#d7ff5f;
+  --accent2:#9b7cff;
+  --success:#75e6a0;
+  --danger:#ff7f8a;
+  --shadow:0 30px 90px rgba(0,0,0,.42);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 8%,rgba(155,124,255,.20),transparent 28rem),
+    radial-gradient(circle at 90% 18%,rgba(215,255,95,.12),transparent 25rem),
+    var(--bg);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:38px 38px;
+  mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+
+.container{
+  width:min(980px,92%);
+  margin:auto;
+}
+
+header{
+  padding:38px 0 18px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.brand{
+  font-size:12px;
+  letter-spacing:.28em;
+  color:#d0d0d8;
+  font-weight:800;
+}
+
+.badge{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.045);
+  padding:8px 12px;
+  border-radius:999px;
+  color:#d6d6df;
+  font-size:12px;
+}
+
+.hero{
+  margin:28px 0 20px;
+  padding:42px 42px 36px;
+  border:1px solid var(--line);
+  border-radius:30px;
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.075),
+    rgba(255,255,255,.025)
+  );
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"06";
+  position:absolute;
+  right:-18px;
+  bottom:-50px;
+  font-size:190px;
+  font-weight:900;
+  line-height:1;
+  color:rgba(255,255,255,.035);
+  pointer-events:none;
+}
+
+.kicker{
+  color:var(--accent);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-weight:800;
+}
+
+h1{
+  font-size:clamp(38px,7vw,72px);
+  line-height:.98;
+  letter-spacing:-.045em;
+  margin:13px 0 16px;
+  max-width:700px;
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.7;
+  max-width:720px;
+  margin:0;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:25px;
+}
+
+.meta span{
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:#d8d8e0;
+  font-size:13px;
+  background:rgba(0,0,0,.14);
+}
+
+.progress-wrap{
+  margin:25px 0 30px;
+}
+
+.progress-head{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:9px;
+}
+
+.progress{
+  height:7px;
+  background:#22222b;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  transition:width .25s ease;
+}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:30px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+  backdrop-filter:blur(14px);
+}
+
+.card+.card{
+  margin-top:18px;
+}
+
+.field{
+  margin:0 0 18px;
+}
+
+label{
+  display:block;
+  font-weight:750;
+  margin-bottom:8px;
+}
+
+input[type=text],
+input[type=email]{
+  width:100%;
+  padding:15px 16px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:#0e0e13;
+  color:#fff;
+  font-size:16px;
+  outline:none;
+  transition:.2s;
+}
+
+input:focus{
+  border-color:rgba(215,255,95,.7);
+  box-shadow:0 0 0 4px rgba(215,255,95,.08);
+}
+
+.question{
+  padding:27px 0;
+  border-top:1px solid var(--line);
+}
+
+.question:first-child{
+  border-top:0;
+  padding-top:0;
+}
+
+.question-number{
+  font-size:11px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:800;
+  margin-bottom:9px;
+}
+
+.question h2{
+  font-size:20px;
+  line-height:1.5;
+  margin:0 0 15px;
+  letter-spacing:-.01em;
+}
+
+.option{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:15px 16px;
+  margin:9px 0;
+  background:var(--surface2);
+  border:1px solid transparent;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.18s;
+}
+
+.option:hover{
+  border-color:rgba(255,255,255,.18);
+  transform:translateY(-1px);
+}
+
+.option:has(input:checked){
+  border-color:rgba(215,255,95,.58);
+  background:rgba(215,255,95,.065);
+}
+
+.option input{
+  margin-top:4px;
+  accent-color:var(--accent);
+}
+
+.option span{
+  line-height:1.5;
+  color:#e9e9ee;
+}
+
+.submit{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:17px 20px;
+  margin-top:8px;
+  background:linear-gradient(100deg,var(--accent2),var(--accent));
+  color:#09090b;
+  font-weight:900;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 14px 30px rgba(155,124,255,.18);
+}
+
+.submit:hover{
+  filter:brightness(1.05);
+  transform:translateY(-1px);
+}
+
+.note{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+  text-align:center;
+  margin:13px 0 0;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.result{
+  text-align:center;
+}
+
+.result-icon{
+  width:74px;
+  height:74px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  margin:0 auto 16px;
+  background:rgba(117,230,160,.1);
+  border:1px solid rgba(117,230,160,.35);
+  color:var(--success);
+  font-size:32px;
+  font-weight:900;
+}
+
+.result.fail .result-icon{
+  background:rgba(255,127,138,.1);
+  border-color:rgba(255,127,138,.35);
+  color:var(--danger);
+}
+
+.result h2{
+  font-size:34px;
+  margin:5px 0;
+}
+
+.score{
+  font-size:76px;
+  font-weight:950;
+  letter-spacing:-.06em;
+  margin:4px 0 8px;
+}
+
+.status{
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-weight:900;
+}
+
+.pass{
+  color:var(--success);
+}
+
+.fail{
+  color:var(--danger);
+}
+
+.result-copy{
+  color:var(--muted);
+  line-height:1.7;
+  max-width:650px;
+  margin:15px auto;
+}
+
+.review{
+  text-align:left;
+  margin-top:32px;
+}
+
+.review h3{
+  margin:0 0 14px;
+}
+
+.review-item{
+  padding:18px 18px 18px 20px;
+  border-radius:15px;
+  background:var(--surface2);
+  border-left:4px solid var(--danger);
+  margin:12px 0;
+}
+
+.review-item.correct{
+  border-left-color:var(--success);
+}
+
+.review-q{
+  font-weight:800;
+  line-height:1.5;
+  margin-bottom:10px;
+}
+
+.review-answer,
+.review-expl{
+  font-size:14px;
+  color:#cfcfd7;
+  line-height:1.6;
+  margin-top:7px;
+}
+
+.review-answer strong{
+  color:#fff;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:25px;
+}
+
+.secondary{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  color:#fff;
+  border-radius:13px;
+  padding:13px 17px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.email-box{
+  margin-top:20px;
+  padding:16px;
+  border-radius:14px;
+  background:rgba(215,255,95,.055);
+  border:1px solid rgba(215,255,95,.20);
+  color:#dce7bd;
+  font-size:13px;
+  line-height:1.6;
+}
+
+footer{
+  text-align:center;
+  color:#666;
+  padding:35px 0 55px;
+  font-size:12px;
+}
+
+@media(max-width:650px){
+
+  .hero{
+    padding:30px 23px 28px;
+    border-radius:22px;
+  }
+
+  .card{
+    padding:22px 18px;
+    border-radius:20px;
+  }
+
+  .topbar{
+    align-items:flex-start;
+  }
+
+  h1{
+    font-size:43px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="container">
+
+  <div class="topbar">
+
+    <div class="brand">
+      APOLO CREATIVO
+    </div>
+
+    <div class="badge">
+      CURSO · ORATORIA
+    </div>
+
+  </div>
+
+
+  <section class="hero">
+
+    <div class="kicker">
+      Clase 06 · El vestuario del orador
+    </div>
+
+    <h1>
+      Cuestionario de la Clase 6
+    </h1>
+
+    <p>
+      Completá las 15 preguntas y descubrí tu resultado al finalizar.
+      La corrección se realiza automáticamente.
+    </p>
+
+    <div class="meta">
+      <span>15 preguntas</span>
+      <span>Aprobación: 70%</span>
+      <span>Resultado inmediato</span>
+    </div>
+
+  </section>
+
+</header>
+
+
+<main class="container">
+
+<div id="quizView">
+
+<section class="card">
+
+  <div class="field">
+
+    <label for="studentName">
+      Nombre y apellido
+    </label>
+
+    <input
+      id="studentName"
+      type="text"
+      autocomplete="name"
+      placeholder="Escribí tu nombre y apellido"
+      required
+    >
+
+  </div>
+
+
+  <div class="field">
+
+    <label for="studentEmail">
+      Correo electrónico
+    </label>
+
+    <input
+      id="studentEmail"
+      type="email"
+      autocomplete="email"
+      placeholder="tu@email.com"
+      required
+    >
+
+  </div>
+
+<div class="email-box">
+Al finalizar, verás tu resultado en pantalla y recibirás una confirmación por correo electrónico. El docente también recibirá automáticamente el resultado de tu evaluación.
+</div>
+
+</section>
+
+
+<section class="card">
+
+<div class="progress-wrap">
+
+  <div class="progress-head">
+
+    <span>
+      Progreso
+    </span>
+
+    <strong id="progressText">
+      0 / 15 respondidas
+    </strong>
+
+  </div>
+
+
+  <div class="progress">
+
+    <div
+      class="progress-bar"
+      id="progressBar">
+    </div>
+
+  </div>
+
+</div>
+
+
+<form id="quizForm"></form>
+
+
+<button
+  class="submit"
+  type="button"
+  onclick="gradeQuiz()">
+
+  Finalizar cuestionario →
+
+</button>
+
+
+<p class="note">
+
+  Revisá tus respuestas antes de finalizar.
+  Una vez enviado, podrás ver la corrección completa.
+
+</p>
+
+</section>
+
+</div>
+
+
+<section
+  id="resultView"
+  class="card hidden">
+
+  <div id="resultContent"></div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  Apolo Creativo · Plataforma de evaluación
+
+</footer>
+
+
+<script>
+
+const class1 = {
+
+  id: 6,
+
+  title: "Clase 6 - El vestuario del orador",
+
+  passPercent: 70,
+
+  questions: [
+
+    {
+      text: "¿Por qué el vestuario es importante para un orador?",
+
+      options: [
+        "Porque determina si una persona tiene talento para hablar.",
+        "Porque es uno de los canales influyentes de la comunicación y participa en la primera impresión que generamos.",
+        "Porque permite reemplazar un buen discurso.",
+        "Porque cuanto más costosa sea la ropa, mayor será la credibilidad."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! La apariencia es uno de los canales influyentes de la comunicación y constituye una fuente importante de información al momento de formar una primera impresión sobre una persona.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. El vestuario no reemplaza la capacidad de comunicación ni depende de cuánto cuesta la ropa. Su importancia está relacionada con la imagen que proyectamos y con la primera impresión que generamos."
+    },
+
+
+    {
+      text: "Según el estudio mencionado en la clase, ¿qué percepción generaban los profesores vestidos formalmente?",
+
+      options: [
+        "Eran percibidos como menos confiables.",
+        "Eran percibidos como más simpáticos que todos los demás.",
+        "Daban una impresión de mayor credibilidad que quienes vestían de manera casual o semi-formal.",
+        "Eran considerados menos profesionales."
+      ],
+
+      correct: 2,
+
+      correctExplanation:
+        "¡Correcto! El estudio citado en la clase encontró que los profesores vestidos formalmente transmitían una mayor percepción de credibilidad que aquellos vestidos de manera casual o semi-formal.",
+
+      incorrectExplanation:
+        "La respuesta correcta es C. El estudio encontró una relación entre la vestimenta formal y una mayor percepción de credibilidad. Esto no significa que la vestimenta formal siempre sea la mejor opción, ya que también influye la similitud con el público."
+    },
+
+
+    {
+      text: "¿Qué relación plantea la clase entre similitud y confianza?",
+
+      options: [
+        "Cuanto más diferente sea nuestra apariencia, mayor será la confianza.",
+        "La similitud puede generar confianza y complicidad porque facilita la sensación de cercanía.",
+        "La ropa no influye nunca en la confianza.",
+        "La confianza depende exclusivamente del precio de la vestimenta."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! La clase explica que las personas tienden a sentirse atraídas por quienes consideran similares. Encontrar puntos en común puede facilitar la conversación, generar afinidad y favorecer la confianza.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. La similitud puede reducir la sensación de conflicto y favorecer una interacción más fluida. En el contexto de la vestimenta, parecerse al estilo del público puede contribuir a generar proximidad."
+    },
+
+
+    {
+      text: "Un orador debe dar una presentación ante un público que viste de manera informal. ¿Qué recomienda principalmente la clase?",
+
+      options: [
+        "Vestirse mucho más formal que el público para demostrar superioridad.",
+        "Vestirse exactamente igual que todos.",
+        "Vestirse un poco más formal que el público, sin exagerar.",
+        "Vestirse de manera más informal que el público."
+      ],
+
+      correct: 2,
+
+      correctExplanation:
+        "¡Correcto! La recomendación es vestir un poco más formal que el público. Esto permite buscar un equilibrio entre transmitir autoridad y mantener cercanía.",
+
+      incorrectExplanation:
+        "La respuesta correcta es C. Vestirse muchísimo más formal puede generar distancia emocional, mientras que vestirse más informal que el público puede perjudicar la credibilidad. La idea es encontrar un punto intermedio."
+    },
+
+
+    {
+      text: "¿Por qué la clase recomienda evitar vestirse de manera más informal que el público?",
+
+      options: [
+        "Porque la ropa informal siempre es incorrecta.",
+        "Porque puede afectar la percepción de credibilidad y hacer que el público cuestione nuestra autoridad.",
+        "Porque impide realizar movimientos corporales.",
+        "Porque solamente los trajes transmiten seguridad."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! La clase advierte que vestir de manera más informal que el público puede hacer que la credibilidad del orador quede en entredicho y que sea percibido como alguien con menos conocimiento o experiencia.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. El problema no es que la ropa informal sea siempre incorrecta, sino que debe ser adecuada al contexto y al público. Si el orador está menos formal que su audiencia, puede afectar negativamente la percepción de autoridad."
+    },
+
+
+    {
+      text: "¿Qué significa “evitar distraer gratuitamente” al elegir el vestuario?",
+
+      options: [
+        "Utilizar siempre ropa negra.",
+        "Conseguir que la ropa no desvíe innecesariamente la atención del público del mensaje.",
+        "Vestirse exactamente igual que el público.",
+        "Evitar cualquier tipo de accesorio."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! El objetivo principal del orador es que el público preste atención al mensaje. Por eso, el vestuario no debería convertirse en un elemento que distraiga innecesariamente de aquello que se está comunicando.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. La recomendación no significa que haya que vestir siempre de una determinada manera ni eliminar todos los accesorios. Significa evitar elementos que llamen tanto la atención que terminen compitiendo con el mensaje."
+    },
+
+
+    {
+      text: "¿Por qué es importante que el orador pueda moverse libre y cómodamente con su ropa?",
+
+      options: [
+        "Porque la comodidad permite expresarse corporalmente con mayor naturalidad y evita movimientos extraños.",
+        "Porque la ropa cómoda siempre es más elegante.",
+        "Porque impide que el público mire al orador.",
+        "Porque permite hablar sin preparar el discurso."
+      ],
+
+      correct: 0,
+
+      correctExplanation:
+        "¡Correcto! Una vestimenta incómoda puede limitar la expresión corporal y generar movimientos poco naturales que el público puede percibir. Por eso se recomienda hacer un ensayo general con la ropa elegida.",
+
+      incorrectExplanation:
+        "La respuesta correcta es A. La comodidad no se plantea simplemente como una cuestión estética. Si la ropa limita los movimientos, puede afectar la expresión y hacer que el orador se vea incómodo o poco natural."
+    },
+
+
+    {
+      text: "Antes de una presentación, una oradora prueba el vestuario que piensa utilizar y descubre que apenas puede moverse. ¿Qué debería hacer?",
+
+      options: [
+        "Utilizarlo igualmente porque es elegante.",
+        "Cambiarlo por una opción que le permita moverse libre y cómodamente.",
+        "Permanecer inmóvil durante toda la presentación.",
+        "Evitar utilizar gestos."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! La clase recomienda hacer un ensayo general con la ropa antes del evento y utilizarla solamente si permite moverse libremente sin comprometer la comodidad ni la imagen.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. Una vestimenta que limita los movimientos puede perjudicar la expresión corporal y hacer que el orador parezca incómodo. Es preferible elegir una prenda que permita desenvolverse con libertad."
+    },
+
+
+    {
+      text: "¿Por qué la clase recomienda prestar atención a los tejidos traslúcidos en determinados escenarios?",
+
+      options: [
+        "Porque pueden generar reflejos que impiden escuchar al orador.",
+        "Porque con determinadas luces pueden transparentarse y convertirse en una distracción para el público.",
+        "Porque siempre son considerados poco elegantes.",
+        "Porque dificultan la respiración."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! En escenarios con iluminación intensa, determinados tejidos pueden transparentarse y desviar la atención del público. La recomendación busca evitar distracciones innecesarias durante la exposición.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. El problema señalado no es que los tejidos traslúcidos sean siempre incorrectos, sino que bajo determinadas luces pueden transparentarse y convertirse en una distracción que compita con el mensaje."
+    },
+
+
+    {
+      text: "¿Qué relación existe entre la ropa y la autoconfianza del orador?",
+
+      options: [
+        "La ropa determina completamente la personalidad.",
+        "Si la persona se siente incómoda con lo que lleva, puede aumentar su ansiedad y disminuir su concentración en la tarea.",
+        "La ropa no tiene ninguna relación con la seguridad.",
+        "Cuanto más cara sea la ropa, mayor será automáticamente la confianza."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! Cuando una persona siente que la ropa no le queda bien o la hace sentir incómoda, puede concentrarse en la ansiedad que esa situación le genera en lugar de concentrarse plenamente en su presentación.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. La clase no sostiene que la ropa determine la confianza ni que una prenda cara garantice seguridad. Explica que sentirse incómodo con la ropa puede aumentar la ansiedad y afectar la concentración y el rendimiento."
+    },
+
+
+    {
+      text: "¿Qué significa que el orador debe “sentirse bien con lo que lleva”?",
+
+      options: [
+        "Que debe usar siempre ropa de lujo.",
+        "Que debe elegir una vestimenta con la que se sienta cómodo y que sea coherente con su estilo y el contexto.",
+        "Que debe vestirse igual que todos los demás.",
+        "Que la comodidad es más importante que cualquier contexto."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! La imagen no depende únicamente de la ropa, sino también de cómo la llevamos. La clase recomienda sentirse bien con lo que se usa y mantener un estilo propio dentro de la etiqueta correspondiente al evento.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. Sentirse bien no significa utilizar ropa costosa ni ignorar el contexto. Se trata de encontrar una vestimenta que permita sentirse seguro y que sea coherente con el propio estilo y las características del evento."
+    },
+
+
+    {
+      text: "¿Qué recomendación brinda la clase respecto de la talla de la ropa?",
+
+      options: [
+        "Utilizar prendas muy ajustadas para marcar la figura.",
+        "Utilizar prendas mucho más grandes para estar cómodo.",
+        "Elegir una talla adecuada, evitando prendas demasiado ceñidas o demasiado anchas.",
+        "La talla no tiene importancia mientras la ropa sea formal."
+      ],
+
+      correct: 2,
+
+      correctExplanation:
+        "¡Correcto! El material recomienda elegir una talla adecuada que favorezca al orador y evitar prendas excesivamente ajustadas o demasiado amplias.",
+
+      incorrectExplanation:
+        "La respuesta correcta es C. Una talla incorrecta puede afectar tanto la comodidad como la imagen. Por eso se recomienda utilizar prendas que correspondan adecuadamente al cuerpo, evitando excesos."
+    },
+
+
+    {
+      text: "¿Por qué se recomienda revisar el vestuario antes de salir al campo visual del público?",
+
+      options: [
+        "Para evitar que la primera impresión sea ver al orador acomodándose la ropa durante la exposición.",
+        "Para asegurarse de que el público conozca el precio de la ropa.",
+        "Para cambiarse de vestuario durante el discurso.",
+        "Para memorizar el discurso frente al espejo."
+      ],
+
+      correct: 0,
+
+      correctExplanation:
+        "¡Correcto! La clase recomienda revisar todo antes de aparecer frente al público. Si el orador empieza a acomodarse la camisa, el cabello o la ropa frente a la audiencia, esa acción puede convertirse en parte de la primera impresión.",
+
+      incorrectExplanation:
+        "La respuesta correcta es A. La preparación del vestuario debe realizarse antes de entrar en el campo visual del público. La primera impresión no debería ser la de un orador intentando arreglarse mientras comienza su presentación."
+    },
+
+
+    {
+      text: "¿Cuál es el equilibrio que debe buscar un orador al elegir su vestimenta?",
+
+      options: [
+        "Parecer mucho más importante que el público.",
+        "Conseguir autoridad y, al mismo tiempo, mantener cercanía con la audiencia.",
+        "Vestirse siempre de manera informal.",
+        "Vestirse siempre de traje independientemente del evento."
+      ],
+
+      correct: 1,
+
+      correctExplanation:
+        "¡Correcto! La clase plantea que el orador debe buscar un equilibrio entre caer bien y ser percibido como una autoridad. Vestirse ligeramente más formal que el público puede ayudar a conseguir ambas cosas.",
+
+      incorrectExplanation:
+        "La respuesta correcta es B. La vestimenta no debe utilizarse para marcar una distancia excesiva con el público. El objetivo es combinar autoridad y cercanía, adaptando la formalidad al contexto y a la audiencia."
+    },
+
+
+    {
+      text: "¿Cuál de las siguientes afirmaciones resume mejor la enseñanza principal de la Clase 6?",
+
+      options: [
+        "La ropa es más importante que el contenido del discurso.",
+        "El orador debe vestirse siempre de manera formal.",
+        "El vestuario debe ser adecuado al contexto, permitir comodidad y contribuir a proyectar una imagen coherente, segura y profesional.",
+        "La credibilidad de un orador depende exclusivamente de su apariencia."
+      ],
+
+      correct: 2,
+
+      correctExplanation:
+        "¡Correcto! La clase plantea que el vestuario puede influir en la percepción y credibilidad del mensaje, pero también en la propia seguridad del orador. Por eso debe ser adecuado al contexto, cómodo y coherente con la imagen que se desea proyectar.",
+
+      incorrectExplanation:
+        "La respuesta correcta es C. La clase no afirma que la apariencia sea más importante que el contenido ni que exista una única forma correcta de vestir. El vestuario debe adaptarse al contexto, permitir desenvolverse cómodamente y contribuir a transmitir una imagen coherente y profesional."
+    }
+
+  ]
+
+};
+
+
+const form = document.getElementById("quizForm");
+
+
+function renderQuiz(){
+
+  form.innerHTML = class1.questions.map((q,i)=>`
+
+    <div class="question">
+
+      <div class="question-number">
+        Pregunta ${i+1} de ${class1.questions.length}
+      </div>
+
+      <h2>
+        ${escapeHtml(q.text)}
+      </h2>
+
+      ${q.options.map((option,j)=>`
+
+        <label class="option">
+
+          <input
+            type="radio"
+            name="q${i}"
+            value="${j}"
+          >
+
+          <span>
+            ${escapeHtml(option)}
+          </span>
+
+        </label>
+
+      `).join("")}
+
+    </div>
+
+  `).join("");
+
+  form.addEventListener("change",updateProgress);
+
+}
+
+
+function updateProgress(){
+
+  const answered =
+    [...document.querySelectorAll(
+      'input[type="radio"]:checked'
+    )].length;
+
+  document.getElementById("progressText").textContent =
+    `${answered} / ${class1.questions.length} respondidas`;
+
+  document.getElementById("progressBar").style.width =
+    `${(answered/class1.questions.length)*100}%`;
+
+}
+
+
+async function gradeQuiz(){
+
+  const name = document.getElementById("studentName").value.trim();
+  const email = document.getElementById("studentEmail").value.trim();
+
+  if(!name || !email){
+    alert("Completá tu nombre y correo electrónico antes de finalizar.");
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+    return;
+  }
+
+  const answers = class1.questions.map((_,i)=>{
+
+    const selected =
+      document.querySelector(`input[name="q${i}"]:checked`);
+
+    return selected ? Number(selected.value) : null;
+
+  });
+
+  const unanswered =
+    answers.filter(a => a === null).length;
+
+  if(unanswered){
+
+    alert(
+      `Todavía tenés ${unanswered} pregunta${unanswered===1?"":"s"} sin responder.`
+    );
+
+    const firstUnanswered =
+      answers.indexOf(null);
+
+    document.querySelectorAll(".question")[firstUnanswered]
+      ?.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+
+    return;
+  }
+
+
+  // ==============================
+  // CORREGIR RESPUESTAS
+  // ==============================
+
+  let correct = 0;
+
+  const review = class1.questions.map((q,i)=>{
+
+    const isCorrect =
+      answers[i] === q.correct;
+
+    if(isCorrect){
+      correct++;
+    }
+
+    return {
+
+      number:i+1,
+
+      question:q.text,
+
+      selected:q.options[answers[i]],
+
+      correct:q.options[q.correct],
+
+      isCorrect:isCorrect,
+
+      explanation:
+        isCorrect
+          ? q.correctExplanation
+          : q.incorrectExplanation
+
+    };
+
+  });
+
+
+  const percent =
+    Math.round(
+      correct / class1.questions.length * 100
+    );
+
+
+  const passed =
+    percent >= class1.passPercent;
+
+
+  // ==============================
+  // PREPARAR DATOS PARA CLOUDFLARE
+  // ==============================
+
+  const datos = {
+
+    curso:"Oratoria",
+
+    clase:6,
+
+    nombre:name,
+
+    email:email,
+
+    totalPreguntas:
+      class1.questions.length,
+
+    respuestasCorrectas:
+      correct,
+
+    porcentaje:
+      percent,
+
+    aprobado:
+      passed,
+
+    respuestas:
+      answers,
+
+    fecha:
+      new Date().toISOString()
+
+  };
+
+
+  // ==============================
+  // AVISAR QUE SE ESTÁ ENVIANDO
+  // ==============================
+
+  const boton =
+    document.querySelector(".submit");
+
+  if(boton){
+
+    boton.disabled = true;
+
+    boton.textContent =
+      "Enviando resultado...";
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        "https://oratoria-formularios.loloramosok.workers.dev/",
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(datos)
+
+        }
+      );
+
+
+    const resultado =
+      await response.json();
+
+
+    console.log(
+      "Respuesta de Cloudflare:",
+      resultado
+    );
+
+
+    // ==============================
+    // SI CLOUDLARE CONFIRMA EL ENVÍO
+    // ==============================
+
+    if(!response.ok || !resultado.ok){
+
+      throw new Error(
+        resultado.error ||
+        resultado.mensaje ||
+        "Cloudflare no pudo procesar el envío."
+      );
+
+    }
+
+
+    // ==============================
+    // MOSTRAR RESULTADO
+    // ==============================
+
+    renderResult({
+
+      name:name,
+
+      email:email,
+
+      correct:correct,
+
+      percent:percent,
+
+      passed:passed,
+
+      review:review
+
+    });
+
+
+  } catch(error){
+
+    console.error(
+      "Error enviando resultado:",
+      error
+    );
+
+
+    if(boton){
+
+      boton.disabled = false;
+
+      boton.textContent =
+        "Finalizar cuestionario →";
+
+    }
+
+
+    alert(
+      "El cuestionario fue corregido, pero hubo un problema al enviar el resultado por correo. Por favor, intentá nuevamente."
+    );
+
+  }
+
+}
+
+
+function renderResult(data){
+
+  document
+    .getElementById("quizView")
+    .classList
+    .add("hidden");
+
+
+  const rv =
+    document.getElementById("resultView");
+
+
+  rv.classList.remove("hidden");
+
+
+  rv.classList.toggle(
+    "fail",
+    !data.passed
+  );
+
+
+  const reviewHtml =
+    data.review.map(item=>`
+
+      <div class="review-item ${item.isCorrect?"correct":""}">
+
+        <div class="review-q">
+
+          ${item.number}.
+          ${escapeHtml(item.question)}
+
+        </div>
+
+
+        <div class="review-answer">
+
+          <strong>
+            Tu respuesta:
+          </strong>
+
+          ${escapeHtml(item.selected)}
+
+        </div>
+
+
+        ${
+          item.isCorrect
+          ? ""
+          : `
+
+            <div class="review-answer">
+
+              <strong>
+                Respuesta correcta:
+              </strong>
+
+              ${escapeHtml(item.correct)}
+
+            </div>
+
+          `
+        }
+
+
+        <div class="review-expl">
+
+          ${escapeHtml(item.explanation)}
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+
+  document.getElementById("resultContent").innerHTML = `
+
+    <div class="result">
+
+      <div class="result-icon">
+
+        ${data.passed ? "✓" : "!"}
+
+      </div>
+
+
+      <div class="status ${data.passed?"pass":"fail"}">
+
+        ${
+          data.passed
+          ? "Cuestionario aprobado"
+          : "Cuestionario no aprobado"
+        }
+
+      </div>
+
+
+      <h2>
+        ${escapeHtml(data.name)}
+      </h2>
+
+
+      <div class="score">
+
+        ${data.percent}%
+
+      </div>
+
+
+      <div>
+
+        <strong>
+          ${data.correct} de ${class1.questions.length}
+        </strong>
+
+        respuestas correctas
+
+      </div>
+
+
+      <p class="result-copy">
+
+        ${
+          data.passed
+          ? "¡Excelente trabajo! Completaste la evaluación y alcanzaste el porcentaje mínimo de aprobación."
+          : "Podés revisar cada respuesta a continuación para identificar qué conceptos necesitás reforzar."
+        }
+
+      </p>
+
+
+      <div class="email-box">
+
+        Resultado enviado correctamente a <strong>${escapeHtml(data.email)}</strong>. También enviamos el resultado al docente.
+
+      </div>
+
+
+      <div class="review">
+
+        <h3>
+          Corrección pregunta por pregunta
+        </h3>
+
+        ${reviewHtml}
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="secondary"
+          onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+          ↑ Volver arriba
+
+        </button>
+
+
+        <button
+          class="secondary"
+          onclick="location.reload()">
+
+          Rehacer cuestionario
+
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+function escapeHtml(value){
+
+  return String(value)
+
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+renderQuiz();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Apolo Creativo · Clase 9 · Trabajo Final</title>
+
+<style>
+:root{
+  --bg:#111217;
+  --bg2:#181a21;
+  --card:#202229;
+  --card2:#252731;
+  --text:#f5f5f7;
+  --muted:#a9abb5;
+  --line:rgba(255,255,255,.10);
+  --accent:#d8ff61;
+  --purple:#9d7cff;
+  --green:#6ee7a0;
+  --red:#ff7885;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(
+      circle at 10% 5%,
+      rgba(157,124,255,.16),
+      transparent 430px
+    ),
+    radial-gradient(
+      circle at 90% 15%,
+      rgba(216,255,97,.08),
+      transparent 400px
+    ),
+    linear-gradient(
+      180deg,
+      #111217 0%,
+      #0d0e12 100%
+    );
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  min-height:100vh;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.025) 1px,
+      transparent 1px
+    );
+  background-size:40px 40px;
+}
+
+.container{
+  width:min(960px,92%);
+  margin:auto;
+}
+
+header{
+  padding:35px 0 20px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.brand{
+  font-size:12px;
+  letter-spacing:.28em;
+  font-weight:800;
+  color:#d5d6dc;
+}
+
+.badge{
+  padding:8px 13px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.045);
+  color:#cfd0d7;
+  font-size:12px;
+}
+
+.hero{
+  margin-top:25px;
+  padding:48px 42px;
+  border:1px solid var(--line);
+  border-radius:30px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.07),
+      rgba(255,255,255,.025)
+    );
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::after{
+  content:"09";
+  position:absolute;
+  right:-15px;
+  bottom:-65px;
+  font-size:200px;
+  line-height:1;
+  font-weight:900;
+  color:rgba(255,255,255,.035);
+}
+
+.kicker{
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-size:12px;
+  font-weight:800;
+}
+
+h1{
+  font-size:clamp(44px,7vw,76px);
+  line-height:.94;
+  letter-spacing:-.055em;
+  margin:15px 0 18px;
+  max-width:760px;
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.7;
+  max-width:740px;
+  margin:0;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:27px;
+}
+
+.meta span{
+  padding:9px 13px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(0,0,0,.16);
+  color:#d5d6dd;
+  font-size:13px;
+}
+
+.card{
+  margin-top:18px;
+  padding:32px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(38,40,49,.96),
+      rgba(27,29,36,.96)
+    );
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:0 20px 55px rgba(0,0,0,.25);
+}
+
+.section-title{
+  margin:0 0 12px;
+  font-size:28px;
+  letter-spacing:-.03em;
+}
+
+.section-text{
+  margin:0;
+  color:#d2d3da;
+  line-height:1.75;
+}
+
+.highlight{
+  margin-top:24px;
+  padding:20px 21px;
+  border-radius:17px;
+  background:rgba(216,255,97,.055);
+  border:1px solid rgba(216,255,97,.20);
+  color:#e3e9cf;
+  line-height:1.65;
+}
+
+.highlight strong{
+  color:var(--accent);
+}
+
+.criteria{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:23px;
+}
+
+.criteria-item{
+  padding:19px;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+  border-radius:17px;
+}
+
+.criteria-number{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:31px;
+  height:31px;
+  border-radius:50%;
+  background:rgba(157,124,255,.14);
+  color:#d2c7ff;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.criteria-item strong{
+  display:block;
+  margin-bottom:6px;
+  font-size:15px;
+}
+
+.criteria-item span{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+}
+
+.warning{
+  margin-top:22px;
+  padding:17px 19px;
+  border-radius:15px;
+  background:rgba(255,120,133,.055);
+  border:1px solid rgba(255,120,133,.20);
+  color:#dfcdd0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.warning strong{
+  color:#ffabb4;
+}
+
+.form-title{
+  margin:0 0 7px;
+  font-size:28px;
+  letter-spacing:-.03em;
+}
+
+.form-subtitle{
+  margin:0 0 26px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.field{
+  margin-bottom:21px;
+}
+
+label{
+  display:block;
+  margin-bottom:9px;
+  font-weight:800;
+}
+
+input[type="text"],
+input[type="email"]{
+  width:100%;
+  padding:16px 17px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#121318;
+  color:#fff;
+  font-size:16px;
+  outline:none;
+  transition:.2s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus{
+  border-color:rgba(216,255,97,.65);
+  box-shadow:0 0 0 4px rgba(216,255,97,.07);
+}
+
+.help{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.submit{
+  width:100%;
+  margin-top:3px;
+  padding:18px 20px;
+  border:0;
+  border-radius:15px;
+  background:linear-gradient(
+    100deg,
+    var(--purple),
+    var(--accent)
+  );
+  color:#08090b;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.submit:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.06);
+}
+
+.message{
+  display:none;
+  margin-top:17px;
+  padding:16px;
+  border-radius:14px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.message.show{
+  display:block;
+}
+
+.message.error{
+  background:rgba(255,120,133,.08);
+  border:1px solid rgba(255,120,133,.25);
+  color:#ffc2c9;
+}
+
+footer{
+  padding:35px 0 55px;
+  text-align:center;
+  color:#686a73;
+  font-size:12px;
+}
+
+@media(max-width:700px){
+
+  .hero{
+    padding:34px 23px;
+    border-radius:23px;
+  }
+
+  .card{
+    padding:24px 18px;
+    border-radius:20px;
+  }
+
+  .criteria{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:46px;
+  }
+
+  .topbar{
+    align-items:flex-start;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="container">
+
+  <div class="topbar">
+
+    <div class="brand">
+      APOLO CREATIVO
+    </div>
+
+    <div class="badge">
+      CLASE 09 · TRABAJO FINAL
+    </div>
+
+  </div>
+
+  <section class="hero">
+
+    <div class="kicker">
+      Instancia final · Oratoria
+    </div>
+
+    <h1>
+      Tu trabajo final.
+      Paso a paso.
+    </h1>
+
+    <p>
+      Llegaste a la instancia final del curso.
+      Ahora es momento de poner en práctica todo lo
+      aprendido durante las clases y demostrar tus
+      herramientas de comunicación y oratoria.
+    </p>
+
+    <div class="meta">
+
+      <span>
+        Trabajo práctico final
+      </span>
+
+      <span>
+        Video máximo: 3 minutos
+      </span>
+
+      <span>
+        Entrega online
+      </span>
+
+      <span>
+        Entrega por WhatsApp
+      </span>
+
+    </div>
+
+  </section>
+
+</header>
+
+<main class="container">
+
+  <!-- EXPLICACIÓN -->
+
+  <section class="card">
+
+    <h2 class="section-title">
+      ¿Qué tenés que hacer?
+    </h2>
+
+    <p class="section-text">
+      Como instancia final del curso, vas a realizar
+      un video de hasta <strong>3 minutos</strong> en
+      el que presentes un discurso poniendo en práctica
+      los conocimientos y técnicas de oratoria trabajados
+      durante las clases.
+    </p>
+
+    <div class="highlight">
+
+      <strong>La consigna:</strong>
+
+      grabá un video de máximo 3 minutos en el que
+      desarrolles un discurso de manera clara,
+      organizada y expresiva. La propuesta busca
+      demostrar, mediante una situación práctica,
+      los conocimientos adquiridos a lo largo del curso.
+
+    </div>
+
+    <h2
+      class="section-title"
+      style="margin-top:32px;"
+    >
+      ¿Qué se tendrá en cuenta?
+    </h2>
+
+    <div class="criteria">
+
+      <div class="criteria-item">
+
+        <div class="criteria-number">
+          01
+        </div>
+
+        <strong>
+          Voz y respiración
+        </strong>
+
+        <span>
+          Manejo de la voz, respiración e intensidad.
+        </span>
+
+      </div>
+
+      <div class="criteria-item">
+
+        <div class="criteria-number">
+          02
+        </div>
+
+        <strong>
+          Articulación
+        </strong>
+
+        <span>
+          Claridad, pronunciación y fluidez al hablar.
+        </span>
+
+      </div>
+
+      <div class="criteria-item">
+
+        <div class="criteria-number">
+          03
+        </div>
+
+        <strong>
+          Expresión corporal
+        </strong>
+
+        <span>
+          Uso de gestos, mirada y expresión corporal.
+        </span>
+
+      </div>
+
+      <div class="criteria-item">
+
+        <div class="criteria-number">
+          04
+        </div>
+
+        <strong>
+          Estructura del discurso
+        </strong>
+
+        <span>
+          Organización y desarrollo claro de las ideas.
+        </span>
+
+      </div>
+
+      <div class="criteria-item">
+
+        <div class="criteria-number">
+          05
+        </div>
+
+        <strong>
+          Vestuario e imagen
+        </strong>
+
+        <span>
+          Imagen adecuada al contexto de la presentación.
+        </span>
+
+      </div>
+
+      <div class="criteria-item">
+
+        <div class="criteria-number">
+          06
+        </div>
+
+        <strong>
+          Comunicación asertiva
+        </strong>
+
+        <span>
+          Desenvolvimiento general y capacidad comunicativa.
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="warning">
+
+      <strong>Importante:</strong>
+
+      el video debe durar como máximo <strong>3 minutos</strong>.
+      El video no se carga en esta página: primero completá tus datos
+      y envialos por WhatsApp. Luego recibirás automáticamente las
+      indicaciones para enviar el video al profesor.
+
+    </div>
+
+    <div class="highlight" style="margin-top:18px;">
+
+      <strong>¿Cómo se calcula la nota?</strong><br>
+
+      La nota del trabajo final se determinará una vez revisado el video
+      y los cuestionarios realizados durante el curso.
+      <strong>
+        Por cada cuestionario que falte, se descontarán 0,5 puntos
+        de la nota del trabajo final.
+      </strong>
+
+    </div>
+
+  </section>
+
+  <!-- FORMULARIO -->
+
+  <section class="card">
+
+    <div id="formView">
+
+      <h2 class="form-title">
+        Solicitud de trabajo final
+      </h2>
+
+      <p class="form-subtitle">
+        Completá tus datos para solicitar la entrega de tu trabajo final.
+      </p>
+
+      <div class="highlight" style="margin:0 0 25px;">
+
+        <strong>Antes de continuar:</strong><br>
+
+        Una vez que completes tus datos y presiones el botón,
+        se abrirá WhatsApp con la información cargada para que
+        puedas enviarla.
+
+        <strong>
+          No tenés que escribir ningún mensaje ni cargar el video
+          en esta página.
+        </strong>
+
+        Después de enviar el mensaje por WhatsApp,
+        recibirás una respuesta automática indicándote que ya
+        podés enviar el video para que el profesor lo evalúe.
+
+      </div>
+
+      <form
+        id="finalWorkForm"
+        onsubmit="sendWhatsApp(event)"
+      >
+
+        <div class="field">
+
+          <label for="studentName">
+            Nombre y apellido
+          </label>
+
+          <input
+            id="studentName"
+            name="name"
+            type="text"
+            placeholder="Tu nombre y apellido"
+            autocomplete="name"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="studentCourse">
+            Curso / materia que cursa
+          </label>
+
+          <input
+            id="studentCourse"
+            name="course"
+            type="text"
+            placeholder="Ej.: Oratoria"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="studentEmail">
+            Correo electrónico
+          </label>
+
+          <input
+            id="studentEmail"
+            name="email"
+            type="email"
+            placeholder="tu@email.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+        <button
+          id="submitButton"
+          class="submit"
+          type="submit"
+        >
+          Enviar mi trabajo final por WhatsApp →
+        </button>
+
+        <div
+          id="message"
+          class="message"
+          role="alert"
+        ></div>
+
+      </form>
+
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+
+  Apolo Creativo · Curso de Oratoria · Trabajo Final
+
+</footer>
+
+<script>
+
+const WHATSAPP_NUMBER = "5493517426042";
+
+function sendWhatsApp(event){
+
+  event.preventDefault();
+
+  const name =
+    document
+      .getElementById("studentName")
+      .value
+      .trim();
+
+  const course =
+    document
+      .getElementById("studentCourse")
+      .value
+      .trim();
+
+  const email =
+    document
+      .getElementById("studentEmail")
+      .value
+      .trim();
+
+  if(!name || !course || !email){
+
+    showError(
+      "Completá todos los datos antes de continuar."
+    );
+
+    return;
+  }
+
+  const message =
+    "SOLICITUD DE TRABAJO FINAL\n\n" +
+    "Nombre y apellido: " + name + "\n" +
+    "Curso / materia: " + course + "\n" +
+    "Correo electrónico: " + email + "\n\n" +
+    "El alumno solicita enviar su trabajo final por WhatsApp.";
+
+  const encodedMessage =
+    encodeURIComponent(message);
+
+  const whatsappUrl =
+    WHATSAPP_NUMBER
+      ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`
+      : `https://wa.me/?text=${encodedMessage}`;
+
+  window.open(
+    whatsappUrl,
+    "_blank"
+  );
+
+}
+
+function showError(text){
+
+  const message =
+    document.getElementById("message");
+
+  message.className =
+    "message error show";
+
+  message.textContent =
+    text;
+
+  message.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+</script>
+
+</body>
+</html>
