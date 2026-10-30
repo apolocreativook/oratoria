@@ -16,6 +16,23 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;ba
 .submit{width:100%;border:0;border-radius:15px;padding:17px 20px;margin-top:8px;background:linear-gradient(100deg,var(--accent-2),var(--accent));color:#09090b;font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 14px 30px rgba(155,124,255,.18)}.submit:hover{filter:brightness(1.05);transform:translateY(-1px)}.note{color:var(--muted);font-size:13px;line-height:1.55;text-align:center;margin:13px 0 0}.hidden{display:none!important}
 .result{text-align:center}.result-icon{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;background:rgba(117,230,160,.1);border:1px solid rgba(117,230,160,.35);color:var(--success);font-size:32px;font-weight:900}.result.fail .result-icon{background:rgba(255,127,138,.1);border-color:rgba(255,127,138,.35);color:var(--danger)}.result h2{font-size:34px;margin:5px 0}.score{font-size:76px;font-weight:950;letter-spacing:-.06em;margin:4px 0 8px}.status{font-size:13px;text-transform:uppercase;letter-spacing:.18em;font-weight:900}.pass{color:var(--success)}.fail{color:var(--danger)}.result-copy{color:var(--muted);line-height:1.7;max-width:650px;margin:15px auto}.review{text-align:left;margin-top:32px}.review h3{margin:0 0 14px}.review-item{padding:18px 18px 18px 20px;border-radius:15px;background:var(--surface-3);border-left:4px solid var(--danger);margin:12px 0}.review-item.correct{border-left-color:var(--success)}.review-q{font-weight:800;line-height:1.5;margin-bottom:10px}.review-answer,.review-expl{font-size:14px;color:#cfcfd7;line-height:1.6}.review-answer strong{color:#fff}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}.secondary{border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;border-radius:13px;padding:13px 17px;font-weight:800;cursor:pointer}.email-box{margin-top:20px;padding:16px;border-radius:14px;background:rgba(215,255,95,.055);border:1px solid rgba(215,255,95,.20);color:#dce7bd;font-size:13px;line-height:1.6}footer{text-align:center;color:#666;padding:35px 0 55px;font-size:12px}
 @media(max-width:650px){.hero{padding:30px 23px 28px;border-radius:22px}.card{padding:22px 18px;border-radius:20px}.topbar{align-items:flex-start}h1{font-size:43px}}
+
+.certificate-wrap{width:100%;max-width:540px;margin:0 auto 18px;background:#f7f7f5;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 55px rgba(0,0,0,.28)}
+#certificateCanvas{display:block;width:100%;height:auto}
+.certificate-note{max-width:760px;margin:18px auto;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.045);text-align:left;color:var(--text)}
+.certificate-note strong{display:block;margin-bottom:6px;color:var(--accent)}
+.certificate-note p{margin:0;color:var(--muted);line-height:1.6}
+.certificate-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px auto;max-width:850px}
+.certificate-actions button{display:flex;align-items:center;justify-content:center;gap:12px;min-height:76px;padding:14px 18px;border-radius:15px;font:inherit;cursor:pointer;text-align:left}
+.certificate-actions button span:first-child{font-size:27px;line-height:1}
+.certificate-actions strong,.certificate-actions small{display:block}
+.certificate-actions strong{font-size:14px}
+.certificate-actions small{font-size:11px;margin-top:4px;opacity:.8}
+.certificate-download{background:transparent;color:var(--text);border:1px solid var(--accent-2)}
+.certificate-whatsapp{background:linear-gradient(100deg,#237d51,#31a56e);color:#fff;border:1px solid #31a56e}
+.certificate-footnote{max-width:760px;margin:0 auto;color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:650px){.certificate-actions{grid-template-columns:1fr}.certificate-actions button{justify-content:flex-start}.certificate-wrap{border-radius:12px}}
+
 </style>
 </head>
 <body>
@@ -25,7 +42,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;ba
 <section class="card"><div class="field"><label for="studentName">Nombre y apellido</label><input id="studentName" type="text" autocomplete="name" placeholder="Escribí tu nombre y apellido" required></div>
 <div class="field"><label for="studentEmail">Correo electrónico</label><input id="studentEmail" type="email" autocomplete="email" placeholder="tu@email.com" required></div>
 <div class="email-box">
-Al finalizar, verás tu resultado en pantalla y recibirás una confirmación por correo electrónico. El docente también recibirá automáticamente el resultado de tu evaluación.
+Al finalizar, verás tu comprobante de evaluación. Podrás descargarlo y enviar tu resultado al docente por WhatsApp.
 </div></section>
 <section class="card" style="margin-top:18px"><div class="progress-wrap"><div class="progress-head"><span>Progreso</span><strong id="progressText">0 / 15 respondidas</strong></div><div class="progress"><div class="progress-bar" id="progressBar"></div></div></div>
 <form id="quizForm"></form><button class="submit" type="button" onclick="gradeQuiz()">Finalizar cuestionario →</button><p class="note">Revisá tus respuestas antes de finalizar. Una vez enviado, podrás ver la corrección completa.</p></section></div>
@@ -285,150 +302,225 @@ async function gradeQuiz(){
 
 
   // ==============================
-  // PREPARAR DATOS PARA CLOUDFLARE
-  // ==============================
-
-  const datos = {
-
-    curso:"Oratoria",
-
-    clase:1,
-
-    nombre:name,
-
-    email:email,
-
-    totalPreguntas:
-      class1.questions.length,
-
-    respuestasCorrectas:
-      correct,
-
-    porcentaje:
-      percent,
-
-    aprobado:
-      passed,
-
-    respuestas:
-      answers,
-
-    fecha:
-      new Date().toISOString()
-
+  
+  // Mostrar el resultado localmente: ya no dependemos del envío por correo.
+  const resultData = {
+    name,
+    email,
+    correct,
+    total: class1.questions.length,
+    incorrect: class1.questions.length - correct,
+    percent,
+    grade: Math.round((percent / 10) * 10) / 10,
+    passed,
+    review,
+    classTitle: class1.title || `Clase ${class1.id}`,
+    classNumber: class1.id,
+    date: new Date()
   };
 
-
-  // ==============================
-  // AVISAR QUE SE ESTÁ ENVIANDO
-  // ==============================
-
-  const boton =
-    document.querySelector(".submit");
-
-  if(boton){
-
+  const boton = document.querySelector(".submit");
+  if (boton) {
     boton.disabled = true;
-
-    boton.textContent =
-      "Enviando resultado...";
-
+    boton.textContent = "Evaluación completada";
   }
 
-
-  try {
-
-    const response =
-      await fetch(
-        "https://oratoria-formularios.loloramosok.workers.dev/",
-        {
-
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify(datos)
-
-        }
-      );
-
-
-    const resultado =
-      await response.json();
-
-
-    console.log(
-      "Respuesta de Cloudflare:",
-      resultado
-    );
-
-
-    // ==============================
-    // SI CLOUDLARE CONFIRMA EL ENVÍO
-    // ==============================
-
-    if(!response.ok || !resultado.ok){
-
-      throw new Error(
-        resultado.error ||
-        resultado.mensaje ||
-        "Cloudflare no pudo procesar el envío."
-      );
-
-    }
-
-
-    // ==============================
-    // MOSTRAR RESULTADO
-    // ==============================
-
-    renderResult({
-
-      name:name,
-
-      email:email,
-
-      correct:correct,
-
-      percent:percent,
-
-      passed:passed,
-
-      review:review
-
-    });
-
-
-  } catch(error){
-
-    console.error(
-      "Error enviando resultado:",
-      error
-    );
-
-
-    if(boton){
-
-      boton.disabled = false;
-
-      boton.textContent =
-        "Finalizar cuestionario →";
-
-    }
-
-
-    alert(
-      "El cuestionario fue corregido, pero hubo un problema al enviar el resultado por correo. Por favor, intentá nuevamente."
-    );
-
-  }
-
+  renderResult(resultData);
 }
-function renderResult(data){document.getElementById("quizView").classList.add("hidden");const rv=document.getElementById("resultView");rv.classList.remove("hidden");rv.classList.toggle("fail",!data.passed);const reviewHtml=data.review.map(item=>`<div class="review-item ${item.isCorrect?"correct":""}"><div class="review-q">${item.number}. ${escapeHtml(item.question)}</div><div class="review-answer"><strong>Tu respuesta:</strong> ${escapeHtml(item.selected)}</div>${item.isCorrect?"":`<div class="review-answer"><strong>Respuesta correcta:</strong> ${escapeHtml(item.correct)}</div>`}<div class="review-expl">${escapeHtml(item.explanation)}</div></div>`).join("");document.getElementById("resultContent").innerHTML=`<div class="result"><div class="result-icon">${data.passed?"✓":"!"}</div><div class="status ${data.passed?"pass":"fail"}">${data.passed?"Cuestionario aprobado":"Cuestionario no aprobado"}</div><h2>${escapeHtml(data.name)}</h2><div class="score">${data.percent}%</div><div><strong>${data.correct} de ${class1.questions.length}</strong> respuestas correctas</div><p class="result-copy">${data.passed?"¡Excelente trabajo! Completaste la evaluación y alcanzaste el porcentaje mínimo de aprobación.":"Podés revisar cada respuesta a continuación para identificar qué conceptos necesitás reforzar."}</p><div class="email-box">Resultado enviado correctamente a <strong>${escapeHtml(data.email)}</strong>. También enviamos el resultado al docente.</div><div class="review"><h3>Corrección pregunta por pregunta</h3>${reviewHtml}</div><div class="actions"><button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Volver arriba</button><button class="secondary" onclick="location.reload()">Rehacer cuestionario</button></div></div>`;window.scrollTo({top:0,behavior:"smooth"});}
+
+
+function renderResult(data) {
+  document.getElementById("quizView").classList.add("hidden");
+  const rv = document.getElementById("resultView");
+  rv.classList.remove("hidden");
+  rv.classList.toggle("fail", !data.passed);
+
+  const reviewHtml = data.review.map(item => `
+    <div class="review-item ${item.isCorrect ? "correct" : ""}">
+      <div class="review-q">${item.number}. ${escapeHtml(item.question)}</div>
+      <div class="review-answer"><strong>Tu respuesta:</strong> ${escapeHtml(item.selected)}</div>
+      ${item.isCorrect ? "" : `<div class="review-answer"><strong>Respuesta correcta:</strong> ${escapeHtml(item.correct)}</div>`}
+      <div class="review-expl">${escapeHtml(item.explanation)}</div>
+    </div>
+  `).join("");
+
+  const dateText = data.date.toLocaleString("es-AR", {
+    day: "2-digit", month: "long", year: "numeric",
+    hour: "2-digit", minute: "2-digit"
+  });
+  const evaluationId = `APO-OR-${String(data.classNumber).padStart(2,"0")}-${Date.now().toString().slice(-6)}`;
+
+  document.getElementById("resultContent").innerHTML = `
+    <div class="result">
+      <div class="certificate-wrap">
+        <canvas id="certificateCanvas" width="1080" height="1440"
+          aria-label="Comprobante de resultado de la evaluación"></canvas>
+      </div>
+      <div class="certificate-note">
+        <strong>Importante</strong>
+        <p>Para mayor seguridad, te recomendamos guardar esta imagen en tus archivos.
+        Sirve como comprobante de tu evaluación en caso de que necesites presentarla en el futuro.</p>
+      </div>
+      <div class="certificate-actions">
+        <button type="button" class="certificate-download" onclick="downloadCertificate()">
+          <span aria-hidden="true">↓</span>
+          <span><strong>Descargar imagen</strong><small>Guardá tu comprobante</small></span>
+        </button>
+        <button type="button" class="certificate-whatsapp" onclick="sendResultWhatsApp()">
+          <span aria-hidden="true">◉</span>
+          <span><strong>Enviar por WhatsApp al profesor</strong><small>Compartí tu resultado con Apolo Creativo</small></span>
+        </button>
+      </div>
+      <p class="certificate-footnote">Al elegir WhatsApp se abrirá una conversación con el profesor y el mensaje ya estará preparado. Solo tendrás que presionar Enviar.</p>
+    </div>
+    <div class="review">
+      <h3>Corrección pregunta por pregunta</h3>
+      ${reviewHtml}
+    </div>
+    <div class="actions">
+      <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Volver arriba</button>
+      <button class="secondary" onclick="location.reload()">Rehacer cuestionario</button>
+    </div>
+  `;
+
+  window.apoloCertificateData = {
+    ...data, dateText, evaluationId
+  };
+  drawCertificate(window.apoloCertificateData);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function drawCertificate(data) {
+  const canvas = document.getElementById("certificateCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+
+  // Paleta sobria inspirada en la plataforma: carbón, violeta y lima.
+  ctx.fillStyle = "#f7f7f5";
+  ctx.fillRect(0, 0, W, H);
+
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, "#ffffff");
+  bg.addColorStop(1, "#f0f0f3");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = "#111116";
+  ctx.fillRect(0, 0, W, 18);
+  ctx.fillStyle = "#9b7cff";
+  ctx.fillRect(0, 18, W * 0.34, 8);
+  ctx.fillStyle = "#d7ff5f";
+  ctx.fillRect(W * 0.34, 18, W * 0.18, 8);
+
+  function roundRect(x,y,w,h,r,fill,stroke) {
+    ctx.beginPath();
+    ctx.roundRect(x,y,w,h,r);
+    if (fill) { ctx.fillStyle=fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle=stroke; ctx.lineWidth=2; ctx.stroke(); }
+  }
+  function text(txt,x,y,size,color="#17171d",weight="400",align="left") {
+    ctx.fillStyle=color;
+    ctx.font=`${weight} ${size}px Inter, Arial, sans-serif`;
+    ctx.textAlign=align;
+    ctx.fillText(String(txt),x,y);
+  }
+
+  // Encabezado institucional
+  text("APOLO", W/2-7, 112, 55, "#17171d", "800", "center");
+  text("CREATIVO", W/2, 158, 25, "#777481", "700", "center");
+  roundRect(W/2-95, 184, 190, 5, 3, "#9b7cff");
+  text("CURSO DE ORATORIA", W/2, 236, 25, "#55515f", "700", "center");
+
+  text("Resultado de la Evaluación", 78, 322, 46, "#17171d", "800");
+  text("Este es el resumen de tu rendimiento.", 80, 368, 24, "#66636e");
+
+  // Datos del alumno
+  roundRect(64, 410, 952, 300, 24, "#ffffff", "#e3e1e8");
+  text("ALUMNO/A", 100, 466, 18, "#777481", "700");
+  text(data.name, 100, 510, 30, "#17171d", "700");
+  text("CORREO ELECTRÓNICO", 100, 570, 18, "#777481", "700");
+  text(data.email, 100, 608, 23, "#292631", "400");
+  text("EVALUACIÓN", 590, 466, 18, "#777481", "700");
+  text(data.classTitle, 590, 510, 25, "#17171d", "700");
+  text("FECHA", 590, 570, 18, "#777481", "700");
+  text(data.dateText, 590, 608, 21, "#292631", "400");
+  text("IDENTIFICADOR", 100, 675, 16, "#777481", "700");
+  text(data.evaluationId, 300, 675, 18, "#292631", "600");
+
+  // Panel de rendimiento
+  roundRect(64, 740, 952, 390, 24, "#ffffff", "#e3e1e8");
+  text("TU RENDIMIENTO", 100, 798, 20, "#777481", "700");
+
+  // Anillo de porcentaje
+  const cx=270, cy=940, radius=112;
+  ctx.beginPath(); ctx.arc(cx,cy,radius,0,Math.PI*2);
+  ctx.strokeStyle="#e7e5ec"; ctx.lineWidth=22; ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx,cy,radius,-Math.PI/2,-Math.PI/2+(Math.PI*2*data.percent/100));
+  ctx.strokeStyle=data.passed?"#8abf45":"#9b7cff";
+  ctx.lineWidth=22; ctx.lineCap="round"; ctx.stroke();
+  text(`${data.percent}%`,cx,cy+12,55,"#17171d","800","center");
+  text("de aciertos",cx,cy+49,22,"#777481","400","center");
+
+  const rows = [
+    ["Respuestas correctas", `${data.correct} / ${data.total}`],
+    ["Respuestas incorrectas", `${data.incorrect} / ${data.total}`],
+    ["Calificación obtenida", `${data.grade.toFixed(1).replace(".",",")} / 10`]
+  ];
+  rows.forEach((row,i)=>{
+    const y=865+i*78;
+    text(row[0], 470, y, 23, "#55515f", "500");
+    text(row[1], 950, y, 25, "#17171d", "700", "right");
+    if(i<rows.length-1){
+      ctx.strokeStyle="#eceaf0"; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(465,y+25); ctx.lineTo(950,y+25); ctx.stroke();
+    }
+  });
+  text("RESULTADO",470,1100,20,"#777481","700");
+  roundRect(735,1064,215,54,27,data.passed?"#e8f3dc":"#eee8fa");
+  text(data.passed?"APROBADO":"A REFORZAR",842,1100,20,data.passed?"#416b20":"#6848a2","800","center");
+
+  // Nota de resguardo y pie
+  roundRect(64, 1160, 952, 150, 22, "#eeedf2", "#e1dfe8");
+  text("IMPORTANTE", 100, 1208, 19, "#17171d", "800");
+  text("Para mayor seguridad, guardá esta imagen en tus archivos.", 100, 1250, 20, "#55515f");
+  text("Sirve como comprobante de tu evaluación si necesitás presentarla.", 100, 1284, 20, "#55515f");
+  text("¡Seguimos construyendo juntos tu mejor versión!", W/2, 1370, 23, "#51476b", "700", "center");
+  text("APOLO CREATIVO  ·  ORATORIA", W/2, 1415, 16, "#777481", "700", "center");
+}
+
+function downloadCertificate() {
+  const canvas = document.getElementById("certificateCanvas");
+  if (!canvas) return;
+  const link = document.createElement("a");
+  link.download = `Apolo-Creativo-${window.apoloCertificateData?.evaluationId || "comprobante"}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+function sendResultWhatsApp() {
+  const data = window.apoloCertificateData;
+  if (!data) return;
+  const message = [
+    "APOLO CREATIVO · CURSO DE ORATORIA",
+    "RESULTADO DE EVALUACIÓN",
+    "",
+    `Alumno/a: ${data.name}`,
+    `Correo: ${data.email}`,
+    `Evaluación: ${data.classTitle}`,
+    `Respuestas correctas: ${data.correct}/${data.total}`,
+    `Respuestas incorrectas: ${data.incorrect}/${data.total}`,
+    `Porcentaje: ${data.percent}%`,
+    `Calificación: ${data.grade.toFixed(1).replace(".",",")}/10`,
+    `Resultado: ${data.passed ? "APROBADO" : "A REFORZAR"}`,
+    `Fecha: ${data.dateText}`,
+    `Comprobante: ${data.evaluationId}`
+  ].join("\\n");
+  const url = `https://wa.me/5493517426042?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank", "noopener");
+}
+
 function escapeHtml(value){return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
 renderQuiz();
 </script>
